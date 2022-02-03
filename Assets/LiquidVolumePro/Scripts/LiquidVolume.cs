@@ -855,7 +855,7 @@ namespace LiquidVolumeFX {
         }
 
         [SerializeField]
-        [Range(0, 2)]
+        [Range(0, 10)]
         float _scatteringAmount = 0.3f;
 
         public float scatteringAmount {
@@ -1664,6 +1664,8 @@ namespace LiquidVolumeFX {
                     }
                 }
             }
+
+            Resources.UnloadUnusedAssets();
         }
 
 
@@ -1863,7 +1865,7 @@ namespace LiquidVolumeFX {
                     turbulenceDueForces *= 0.1f;
                 }
                 Matrix4x4 m = Matrix4x4.TRS(Vector3.zero, rot, Vector3.one);
-                liqMat.SetMatrix("_Rot", m.inverse);
+                liqMat.SetMatrix(ShaderParams.RotationMatrix, m.inverse);
                 if (_topology != TOPOLOGY.Sphere) {
                     float tx = turbDir.x;
                     turbDir.x += (turbDir.z - turbDir.x) * 0.25f;
@@ -2217,6 +2219,10 @@ namespace LiquidVolumeFX {
                     break;
             }
 
+            if (_bubblesAmount < 0) {
+                _bubblesAmount = 0;
+            }
+
             if (_noiseVariation != currentNoiseVariation || requireBubblesUpdate) {
                 requireBubblesUpdate = false;
                 currentNoiseVariation = _noiseVariation;
@@ -2228,14 +2234,14 @@ namespace LiquidVolumeFX {
                 }
                 Texture3D tex3d = noise3DTex[currentNoiseVariation];
                 if (tex3d != null) {
-                    if (_detail.isMultiple()) {
+                    bool needsBubbleTextureUpdate = _bubblesAmount > 0 || (_bubblesAmount == 0 && tex3d != null && tex3d.name.Contains("Clone"));
+                    if (needsBubbleTextureUpdate && _detail.isMultiple()) {
                         if (!tex3d.name.Contains("Clone")) {
                             tex3d = Instantiate(tex3d);
                             tex3d.hideFlags = HideFlags.DontSave;
                             noise3DTex[currentNoiseVariation] = tex3d;
                         }
-                        if (_bubblesAmount < 0)
-                            _bubblesAmount = 0;
+
                         if (colors3D == null || colors3D.Length != 4) {
                             colors3D = new Color[4][];
                         }
@@ -2245,7 +2251,9 @@ namespace LiquidVolumeFX {
                             if (colors3DWithBubbles == null || colors3DWithBubbles.Length != 4) {
                                 colors3DWithBubbles = new Color[4][];
                             }
-                            colors3DWithBubbles[currentNoiseVariation] = new Color[length];
+                            if (colors3DWithBubbles[currentNoiseVariation] == null || colors3DWithBubbles[currentNoiseVariation].Length != length) {
+                                colors3DWithBubbles[currentNoiseVariation] = new Color[length];
+                            }
                         }
                         if (_bubblesAmount > 0 && _detail.isMultiple()) {
                             AddBubbles(tex3d);
@@ -2973,7 +2981,9 @@ namespace LiquidVolumeFX {
                 return;
             }
             MeshFilter mf = GetComponent<MeshFilter>();
-            Mesh mesh = Instantiate<Mesh>(mf.sharedMesh) as Mesh;
+            Mesh mesh = mf.sharedMesh;
+            if (mesh == null) return;
+            mesh = Instantiate(mesh);
             Vector3[] vertices = mesh.vertices;
             Vector3 scale = transform.localScale;
             Vector3 localPos = transform.localPosition;
@@ -3021,7 +3031,10 @@ namespace LiquidVolumeFX {
         public void CenterPivot(Vector3 offset, bool closeMesh) {
 
             MeshFilter mf = GetComponent<MeshFilter>();
-            Mesh mesh = Instantiate(mf.sharedMesh);
+            Mesh mesh = mf.sharedMesh;
+            if (mesh == null) return;
+
+            mesh = Instantiate(mesh);
             mesh.name = mf.sharedMesh.name; // keep original name to detect if user assigns a different mesh to meshfilter and discard originalMesh reference
 
             Vector3[] vertices = mesh.vertices;
@@ -3215,7 +3228,7 @@ namespace LiquidVolumeFX {
                         _liquidLayers[i].mixedMurkiness = temp.murkiness / temp.amount;
                         _liquidLayers[i].mixedScale = temp.scale / temp.amount;
                         _liquidLayers[i].mixedBubblesOpacity = temp.bubblesOpacity / temp.amount;
-                        _liquidLayers[i].mixedAmount = Mathf.Clamp01(_liquidLayers[i].amount / groupDensity);
+                        _liquidLayers[i].mixedAmount = temp.amount / groupDensity;
                         _liquidLayers[i].baseLevel = groupBaseLevel;
                     }
                     k = j - 1;

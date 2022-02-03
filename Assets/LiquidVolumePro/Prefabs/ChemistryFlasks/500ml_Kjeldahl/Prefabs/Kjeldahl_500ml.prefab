@@ -104,7 +104,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5966632538611776171}
   m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.000000110018426, y: 0.10908394, z: -0.0007230945}
+  m_LocalPosition: {x: 0, y: 0.1608, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 5966632538611541647}
@@ -117,7 +117,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5966632538611776171}
-  m_Mesh: {fileID: 0}
+  m_Mesh: {fileID: 4300004, guid: 3488ef0986d0d134da1d520f80b30a73, type: 3}
 --- !u!23 &5966632538609771625
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -205,8 +205,8 @@ MonoBehaviour:
   _smokeBaseObscurance: 2
   _smokeHeightAtten: 4.15
   _smokeSpeed: 5
-  _fixMesh: 1
-  originalMesh: {fileID: 4300004, guid: 3488ef0986d0d134da1d520f80b30a73, type: 3}
+  _fixMesh: 0
+  originalMesh: {fileID: 0}
   originalPivotOffset: {x: 0.000000110018426, y: -0.051716052, z: -0.0007230945}
   _pivotOffset: {x: 0, y: 0, z: 0}
   _autoCloseMesh: 0
@@ -451,7 +451,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5966632538611776175}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.925, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 5966632538611541645}

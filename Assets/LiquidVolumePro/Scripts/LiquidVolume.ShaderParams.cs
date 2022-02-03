@@ -71,6 +71,7 @@ namespace LiquidVolumeFX {
             public static int NoiseTex = Shader.PropertyToID("_NoiseTex");
             public static int NoiseTexUnwrapped = Shader.PropertyToID("_NoiseTexUnwrapped");
             public static int GlobalRefractionTexture = Shader.PropertyToID("_VLGrabBlurTexture");
+            public static int RotationMatrix = Shader.PropertyToID("_Rot");
         }
     }
 

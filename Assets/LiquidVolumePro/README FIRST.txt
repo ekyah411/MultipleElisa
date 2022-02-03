@@ -32,6 +32,12 @@ https://www.assetstore.unity3d.com/en/#!/search/page=1/sortby=popularity/query=p
 Version history
 ---------------
 
+Version 3.0.3
+- Memory optimizations for bubbles option
+
+Version 3.0.2
+- [Fix] Fixed miscible amount calculation bug
+
 Version 3.0.1
 - [Fix] Transparency for layers in a multiple detail level is now handled as in default style to ensure color matching
 

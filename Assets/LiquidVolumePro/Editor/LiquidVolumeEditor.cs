@@ -668,9 +668,12 @@ namespace LiquidVolumeFX {
             DisconnectPrefabInstance(lv.gameObject);
 
             MeshFilter mf = lv.GetComponent<MeshFilter>();
-            string meshPath = AssetDatabase.GetAssetPath(mf.sharedMesh);
+            Mesh mesh = mf.sharedMesh;
+            if (mesh == null) return;
 
-            Mesh mesh = Instantiate<Mesh>(mf.sharedMesh) as Mesh;
+            string meshPath = AssetDatabase.GetAssetPath(mesh);
+
+            mesh = Instantiate(mesh);
             Vector3[] vertices = mesh.vertices;
             Vector3 scale = lv.transform.localScale;
             Vector3 localPos = lv.transform.localPosition;
